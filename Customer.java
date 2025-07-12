@@ -87,6 +87,15 @@ public class Customer {
     }
     
     public String getFullName() {
+        if (firstName == null && lastName == null) {
+            return "";
+        }
+        if (firstName == null) {
+            return lastName;
+        }
+        if (lastName == null) {
+            return firstName;
+        }
         return firstName + " " + lastName;
     }
     
@@ -95,15 +104,22 @@ public class Customer {
             return 0;
         }
         long diff = new Date().getTime() - dateOfBirth.getTime();
-        return (int) (diff / (365 * 24 * 60 * 60 * 1000));
+        return (int) (diff / (365.25 * 24 * 60 * 60 * 1000));
     }
     
     public boolean equals(Object obj) {
-        if (obj instanceof Customer) {
-            Customer other = (Customer) obj;
-            return this.customerId.equals(other.customerId);
+        if (this == obj) {
+            return true;
         }
-        return false;
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Customer other = (Customer) obj;
+        return customerId != null ? customerId.equals(other.customerId) : other.customerId == null;
+    }
+
+    public int hashCode() {
+        return customerId != null ? customerId.hashCode() : 0;
     }
     
     public String toString() {
